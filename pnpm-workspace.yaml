@@ -1,0 +1,15 @@
+packages:
+  - shared
+  - fleet
+  - internal
+
+# Install scripts pnpm may run. esbuild's verifies its platform binary (used by Vite).
+allowBuilds:
+  esbuild: true
+
+# One Vite for the apps and Vitest.
+minimumReleaseAgeExclude:
+  - vite@7.3.8
+
+overrides:
+  vite: 7.3.8

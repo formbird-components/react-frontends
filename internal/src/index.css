@@ -1,0 +1,21 @@
+/* The shared base styles (Tailwind, Inter, the design tokens, light and dark), with SDMS's accent:
+   Formbird blue (#259eca; a little deeper in light mode, so white text on it stays readable). */
+@import '@react-frontends/shared/styles.css';
+
+/* Tailwind: also scan the shared package's components for the classes they use. */
+@source '../node_modules/@react-frontends/shared/src';
+
+:root {
+  --primary: oklch(0.56 0.115 228);
+  --primary-soft: oklch(0.95 0.03 228);
+  --ring: oklch(0.6 0.12 228);
+  --hero: oklch(0.22 0.045 235);
+  --hero-glow: oklch(0.65 0.13 228 / 0.5);
+  --hero-glow-2: oklch(0.7 0.11 185 / 0.3);
+}
+
+.dark {
+  --primary: oklch(0.7 0.12 228);
+  --primary-soft: oklch(0.3 0.06 228);
+  --ring: oklch(0.7 0.11 228);
+}

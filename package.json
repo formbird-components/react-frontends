@@ -1,0 +1,16 @@
+{
+  "name": "react-frontends",
+  "private": true,
+  "description": "React apps on fieldtec-web (fleet, internal) and the package they share (shared).",
+  "type": "module",
+  "packageManager": "pnpm@12.4.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "pnpm -r --workspace-concurrency=1 check",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build"
+  }
+}

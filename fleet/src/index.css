@@ -1,0 +1,13 @@
+/* The shared base styles (Tailwind, Inter, the design tokens, light and dark), with the fleet's
+   accent (the shared default: violet). */
+@import '@react-frontends/shared/styles.css';
+
+/* Tailwind: also scan the shared package's components for the classes they use. */
+@source '../node_modules/@react-frontends/shared/src';
+
+/* MapLibre's controls, in the app's colours. */
+.maplibregl-ctrl-group { @apply rounded-md border border-border bg-card shadow-sm; }
+.maplibregl-ctrl-group button + button { @apply border-border; }
+.dark .maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(1); }
+.maplibregl-popup-content { @apply rounded-lg bg-popover p-0 text-foreground shadow-lg; }
+.maplibregl-popup-tip { display: none; }

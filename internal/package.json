@@ -1,0 +1,51 @@
+{
+  "name": "react-internal",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Formbird's internal service desk (SDMS) in React, on fieldtec-web as the backend and the internal-5 database: My View, All Items, the Item form and Recent. The UI and its behaviour are coded in the app; fieldtec-web stores, searches and enforces.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:app": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:e2e": "node e2e/run.mjs",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "test:e2e:sim": "node e2e/sim.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@react-frontends/shared": "workspace:*",
+    "@tanstack/react-query": "^5.107.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^0.577.0",
+    "radix-ui": "^1.8.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "10.1.0",
+    "react-router": "^7.18.5",
+    "remark-gfm": "4.0.1",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "playwright": "^1.65.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.8",
+    "vitest": "^3.2.7"
+  }
+}
