@@ -3,6 +3,7 @@
 // #item suggestions in the Markdown editors, relationships, attachments and the migrated history.
 // The Item template's rules themselves are in domain/rules.ts; this file only arranges them for the page.
 
+import { withBase } from '@react-frontends/shared/api';
 import { escapeRawHtml, newNote, offersQuickNote, withNote } from '@/domain/rules';
 import type { Account, Attachment, Item, Note, OldHistoryEntry, Relationship, RelationshipType } from '@/domain/types';
 
@@ -164,7 +165,7 @@ const IMAGE = /\.(png|jpe?g|gif|webp|bmp|svg)$/i;
 export const isImage = (a: Attachment) => (a.fileName && /\.\w+$/.test(a.fileName) ? IMAGE.test(a.fileName) : /^(png|jpe?g|gif|webp|bmp|svg)$/i.test(a.fileType ?? ''));
 
 /** Where fieldtec-web serves an attachment (with its name, so a download keeps it). */
-export const fileUrl = (a: Attachment) => `/api/getFile/${encodeURIComponent(a.fileNo)}/${encodeURIComponent(a.fileName || a.fileNo)}`;
+export const fileUrl = (a: Attachment) => withBase(`/api/getFile/${encodeURIComponent(a.fileNo)}/${encodeURIComponent(a.fileName || a.fileNo)}`);
 
 /** An attachment's extension or type, for its label ("PNG"). */
 export const fileKind = (a: Attachment) => (/\.(\w{1,5})$/.exec(a.fileName ?? '')?.[1] ?? a.fileType ?? 'file').toUpperCase();

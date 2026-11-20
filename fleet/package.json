@@ -8,6 +8,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "db:setup": "node scripts/db-setup.mjs",
     "dev": "node scripts/dev.mjs",
     "dev:app": "vite",
     "build": "tsc -b && vite build",

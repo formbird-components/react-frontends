@@ -1,13 +1,13 @@
-// pnpm dev: fieldtec-web with the fleet demo's configuration (server/config/solid-fleet.json: port
-// 3001, the solidjs-fleet-demo database, Redis db 2), then this app on Vite (http://localhost:5190).
+// pnpm dev: fieldtec-web on this app's own configuration, then this app on Vite (http://localhost:5190).
+//
+// The configuration is server/config/react-fleet.json in the fieldtec-web checkout, rewritten from
+// development.json on each start: the react-fleet-demo database and index (created by
+// pnpm db:setup), port 3006, Redis database 7 (scripts/config.mjs).
 // See @react-frontends/shared/dev (shared/dev/start.mjs) for what it does and its settings
 // (FIELDTEC_WEB, FIELDTEC_CONFIG, FIELDTEC_URL, PORT, ALLOWED_HOSTS).
 
 import path from 'node:path';
 import { startDev } from '@react-frontends/shared/dev';
+import { ownConfig } from './config.mjs';
 
-await startDev({
-  appRoot: path.resolve(import.meta.dirname, '..'),
-  config: 'solid-fleet',
-  missingConfigHint: "It is written by the fleet demo's setup: in solidjs-components-fleet, run pnpm db:setup (see README.md).",
-});
+await startDev({ appRoot: path.resolve(import.meta.dirname, '..'), ownConfig });

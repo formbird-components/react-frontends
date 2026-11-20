@@ -1,6 +1,6 @@
 // End-to-end smoke test of the app against a running backend: signs in as each kind of person,
 // opens every page their menu offers, and checks that it renders without errors. Needs the fleet
-// demo on fieldtec-web (http://localhost:3001) and this app (`pnpm dev`, or BASE=…).
+// demo on fieldtec-web (http://localhost:3006) and this app (`pnpm dev`, or BASE=…).
 // Browser, sign-in, console checks: @react-frontends/shared/e2e.
 //
 //   pnpm test:e2e            # BASE=http://localhost:5190, CHROME=/usr/bin/google-chrome

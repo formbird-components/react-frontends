@@ -20,6 +20,10 @@ const APP_PORT = Number(process.env.APP_PORT ?? 5220);
 const BASE = `http://localhost:${APP_PORT}`;
 const ES = process.env.SIM_ES ?? 'http://127.0.0.1:9200';
 const INDEX = process.env.SIM_INDEX ?? 'internal-5';
+/** Data the walk types: a project the busiest person works on, and a word some items contain. */
+const DEMO = INDEX === 'react-internal-demo';
+const PROJECT = process.env.SIM_PROJECT ?? (DEMO ? 'Field Platform' : 'Internal');
+const SEARCH = process.env.SIM_SEARCH ?? (DEMO ? 'offline' : 'scroll');
 const SHOTS = process.env.SCREENSHOTS;
 if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 
@@ -133,8 +137,8 @@ try {
   await page.getByRole('button', { name: 'Create item' }).click();
   check('creating an empty item explains what’s missing', await waitFor(async () => (await page.getByText('Summary is required.').count()) > 0));
   await page.locator('#projectRel').click();
-  await page.keyboard.type('Internal');
-  await option(page, /^Internal$/).click();
+  await page.keyboard.type(PROJECT);
+  await option(page, new RegExp(`^${PROJECT}$`)).click();
   await page.locator('#typeRel').click();
   await option(page, /^Bug$/).click();
   await page.locator('#statusRel').click();
@@ -149,8 +153,8 @@ try {
   console.log('All Items');
   await page.goto(`${BASE}/items`, { waitUntil: 'networkidle' });
   check('items are listed', await waitFor(async () => (await rows(page).count()) > 0));
-  await page.getByLabel('Search items').fill('scroll');
-  check('searching narrows the list (and the address)', await waitFor(async () => new URL(page.url()).search.includes('scroll') && (await rows(page).count()) > 0));
+  await page.getByLabel('Search items').fill(SEARCH);
+  check('searching narrows the list (and the address)', await waitFor(async () => new URL(page.url()).search.includes(SEARCH) && (await rows(page).count()) > 0));
   await page.getByRole('checkbox', { name: /^Select 00/ }).nth(0).click();
   await page.getByRole('checkbox', { name: /^Select 00/ }).nth(1).click();
   await page.getByRole('button', { name: /^Update/ }).first().click();

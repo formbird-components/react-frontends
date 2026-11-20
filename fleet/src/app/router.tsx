@@ -1,3 +1,4 @@
+import { BASE_PATH } from '@react-frontends/shared/api';
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
 import { NotFound } from '@react-frontends/shared/components';
 import { RequireSession } from '@react-frontends/shared/shell';
@@ -30,7 +31,10 @@ const appRoutes: RouteObject[] = [
   { path: '*', element: <NotFound /> },
 ];
 
-export const router = createBrowserRouter([
-  { path: '/login', element: <LoginPage /> },
-  { element: <RequireSession />, children: [{ element: <FleetShell />, children: appRoutes }] },
-]);
+export const router = createBrowserRouter(
+  [
+    { path: '/login', element: <LoginPage /> },
+    { element: <RequireSession />, children: [{ element: <FleetShell />, children: appRoutes }] },
+  ],
+  { basename: BASE_PATH || '/' },
+);

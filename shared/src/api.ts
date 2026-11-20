@@ -72,10 +72,19 @@ export const whenSignedOut = (fn: () => void) => {
   onSignedOut = fn;
 };
 
+/**
+ * The path the app is served under, from Vite's `base` (APP_BASE at build time): '' at the root,
+ * '/react-fleet' behind the demo portal's nginx. fieldtec-web's routes are under it too.
+ */
+export const BASE_PATH = ((import.meta as ImportMeta & { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/').replace(/\/+$/, '');
+
+/** A root-relative path ("/api/…") under the app's base path. */
+export const withBase = (path: string) => (path.startsWith('/') ? `${BASE_PATH}${path}` : path);
+
 async function call<T>(method: string, url: string, body?: unknown): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetch(withBase(url), {
       method,
       credentials: 'same-origin',
       headers: body === undefined || body instanceof FormData ? undefined : { 'content-type': 'application/json' },

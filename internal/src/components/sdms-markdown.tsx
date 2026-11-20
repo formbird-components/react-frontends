@@ -5,6 +5,7 @@
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Link } from 'react-router';
+import { withBase } from '@react-frontends/shared/api';
 import { cn } from '@react-frontends/shared/utils';
 import { appLinkFor } from '@/domain/rules';
 
@@ -23,7 +24,7 @@ const components: Components = {
   },
   img({ src = '', alt }) {
     // Uploaded files are served by fieldtec-web at /api/getFile/<fileNo> (relative in older items).
-    const url = typeof src === 'string' && /^api\//.test(src) ? `/${src}` : src;
+    const url = typeof src === 'string' && /^\/?api\//.test(src) ? withBase(`/${src.replace(/^\//, '')}`) : src;
     return <img src={url as string} alt={alt ?? ''} loading="lazy" className="my-2 max-h-96 max-w-full rounded-md border border-border" />;
   },
   table: ({ children }) => (

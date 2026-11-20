@@ -5,3 +5,4 @@ dist/
 e2e/screens/
 *.tsbuildinfo
 logs/
+dist-portal/

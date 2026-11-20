@@ -43,9 +43,11 @@ You need:
 - Node.js 22+ and pnpm.
 - fieldtec-web checked out beside this repo's folder (e.g. `~/git/fieldtec-web`), with its server
   built: `(cd ~/git/fieldtec-web/projects/server && node build.mjs)`.
-- The fleet demo's database and fieldtec-web configuration (`server/config/solid-fleet.json`).
-  These are created once by [solidjs-components-fleet](../../solidjs-components/solidjs-components-fleet/README.md)'s
-  `pnpm db:setup`, which also needs MongoDB, Elasticsearch and Redis running.
+- MongoDB, Elasticsearch and Redis running (`~/dev/core-setup-docker`).
+- [solidjs-components](../../solidjs-components/README.md) checked out beside this workspace, with
+  [solidjs-components-fleet](../../solidjs-components/solidjs-components-fleet/README.md)'s
+  `pnpm db:setup` run once. Its seed builds this app's data too, and its templates reference the
+  bundles that setup builds.
 
 This app is one package of the `~/git/react-frontends` pnpm workspace (with `shared` and `internal`):
 install once at the workspace root, then run the app from its folder.
@@ -53,27 +55,39 @@ install once at the workspace root, then run the app from its folder.
 ```sh
 cd ~/git/react-frontends && pnpm install     # the whole workspace: one lockfile, one copy of each package
 cd fleet
-pnpm dev          # fieldtec-web on :3001 (the fleet demo's configuration) + the app on http://localhost:5190
+pnpm db:setup     # once: this app's own database, react-fleet-demo (--reset to start again)
+pnpm dev          # fieldtec-web on :3006 (react-fleet) + the app on http://localhost:5190
 ```
 
+`pnpm db:setup` (`scripts/db-setup.mjs`, calling `setupDatabase` from `@react-frontends/shared/dev/db-setup`):
+- builds the Solid fleet demo's documents (templates, server rules, people, assets, bookings…);
+- loads them into a database and Elasticsearch index of this app's own, `react-fleet-demo`, so
+  saving here never changes the Solid demo's data;
+- writes `server/config/react-fleet.json` (port 3006, Redis database 7: `scripts/config.mjs`) and
+  flushes that Redis database.
+
 `pnpm dev` (`scripts/dev.mjs`, calling `startDev` from `@react-frontends/shared/dev`):
-1. Starts fieldtec-web from its checkout with `server/config/solid-fleet.json`. Its output goes to the
-   terminal (dimmed) and to `logs/fieldtec-web.log`.
+1. Rewrites `server/config/react-fleet.json` from `development.json` and starts fieldtec-web from its
+   checkout with it. Its output goes to the terminal (dimmed) and to `logs/fieldtec-web.log`.
 2. Waits until fieldtec-web answers, then starts the app.
 
-If fieldtec-web is already running on that port (say, started by the Solid fleet repo's
-`pnpm demo:server`), it uses that instead. Ctrl+C stops both. (It stops fieldtec-web with SIGINT, as
+If fieldtec-web is already running on that port, it uses that instead. Ctrl+C stops both. (It stops fieldtec-web with SIGINT, as
 Ctrl+C does: on SIGTERM fieldtec-web saves an "error document" to its database.)
 
 | Setting | Default | |
 |---|---|---|
 | `FIELDTEC_WEB` | the nearest `fieldtec-web` beside this repo or a folder above it | Where fieldtec-web is checked out |
-| `FIELDTEC_CONFIG` | `solid-fleet` | Which `server/config/<name>.json` to run (its `port` is the backend's) |
+| `FIELDTEC_CONFIG` | `react-fleet` | Run another existing `server/config/<name>.json` instead, e.g. `solid-fleet` for the Solid demo's data (its `port` is the backend's) |
 | `FIELDTEC_URL` | | A backend already running elsewhere: start nothing, proxy to it |
 | `PORT` | `5190` | The app's port |
 | `ALLOWED_HOSTS` | | More host names the dev server answers (comma-separated). Coder's forwarded ports (`*.coder.formbird.com`) are already allowed. |
 
-`pnpm dev:app` starts only the app (Vite), proxying to `FIELDTEC_URL` or http://localhost:3001.
+`pnpm dev:app` starts only the app (Vite), proxying to `FIELDTEC_URL` or http://localhost:3006.
+
+**Behind the demo portal.** `solidjs-components/portal/run.sh up` also serves this app at `/react-fleet/`
+on the portal's port (8080), beside the Solid demos. It builds the app for that path
+(`APP_BASE=/react-fleet/`, into `dist-portal/`) and starts its fieldtec-web; nginx passes
+`/react-fleet/api` and `/react-fleet/auth` to it. The listing comes from `scripts/portal.mjs`.
 
 `shared/dev/server-deps.cjs` is a preload fieldtec-web runs with. It resolves the server's packages
 from `projects/server`, because a checkout's root `node_modules` may hold older copies that break the
@@ -124,7 +138,7 @@ src/data/         the fleet on the shared data layer: session roles (who, me), t
 src/domain/       the fleet's types, workflows, validators, and logic (logic/: hire cost, booking
                   times, calendar maths, meters and fuel, line totals, service due, check sheets)
 src/lib/          fleetQuery (fleet documents of a kind), money and meter formats
-scripts/dev.mjs   pnpm dev: the shared startDev with the fleet demo's config (solid-fleet)
+scripts/          pnpm dev (dev.mjs), pnpm db:setup (db-setup.mjs), and this app's config, react-fleet (config.mjs)
 e2e/run.mjs       smoke test against a running backend, as each kind of person
 ```
 

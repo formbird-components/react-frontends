@@ -20,6 +20,7 @@
       "default": "./vite/index.mjs"
     },
     "./dev": "./dev/start.mjs",
+    "./dev/db-setup": "./dev/db-setup.mjs",
     "./e2e": "./e2e/harness.mjs"
   },
   "scripts": {

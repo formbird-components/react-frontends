@@ -7,7 +7,9 @@
 //   export default appConfig({ root: import.meta.dirname, port: 5190, backend: 'http://localhost:3001' });
 //
 // Environment: FIELDTEC_URL (the backend; `pnpm dev` sets it), PORT (the app's port), ALLOWED_HOSTS
-// (more host names the dev server answers, comma-separated; Coder's forwarded ports are allowed).
+// (more host names the dev server answers, comma-separated; Coder's forwarded ports are allowed),
+// APP_BASE (the path the built app is served under, e.g. /react-fleet/ behind the demo portal; the
+// router and the API client follow it: BASE_PATH in @react-frontends/shared/api).
 
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
@@ -31,6 +33,7 @@ export function appConfig({ root, port, backend, config = {} }) {
   return mergeConfig(
     {
       root,
+      base: process.env.APP_BASE ?? '/',
       plugins: [react(), tailwindcss()],
       resolve: { alias: { '@': path.resolve(root, 'src') }, dedupe: DEDUPE },
       server: { port: appPort, strictPort: true, allowedHosts, proxy },

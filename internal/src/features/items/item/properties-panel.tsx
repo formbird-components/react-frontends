@@ -6,6 +6,7 @@
 import { Check, ChevronDown, Link2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { toast } from 'sonner';
+import { BASE_PATH } from '@react-frontends/shared/api';
 import { formatDateTime, relative } from '@react-frontends/shared/format';
 import { Button, PersonAvatar, Textarea, Tip } from '@react-frontends/shared/ui';
 import { cn } from '@react-frontends/shared/utils';
@@ -65,7 +66,7 @@ const LOOKUPS: { field: EditableField & string; kind: LookupKind; label: string;
 /** Copies the item's short link (ruleSetCopyUrl, here as /items/<itemRef>). */
 export function CopyLinkButton({ itemRef, className, variant = 'outline' }: { itemRef: string; className?: string; variant?: 'outline' | 'ghost' }) {
   const [copied, setCopied] = useState(false);
-  const url = `${window.location.origin}/items/${itemRef}`;
+  const url = `${window.location.origin}${BASE_PATH}/items/${itemRef}`;
   return (
     <Button
       variant={variant}
